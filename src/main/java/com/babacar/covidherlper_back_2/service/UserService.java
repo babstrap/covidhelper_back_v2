@@ -22,7 +22,6 @@ public class UserService {
     @Autowired
     private UsersRepository usersRepository;
 
-    @PostMapping(value = "/users")
     public ResponseEntity<Object> add(@RequestBody Users users) {
 
         Users users1 = usersRepository.save(users);
@@ -39,7 +38,6 @@ public class UserService {
         return ResponseEntity.status(201).body(users1);
     }
 
-    @PostMapping(value = "/users/login")
     public ResponseEntity<Object> login(@RequestBody Users users) {
         Users users1 = usersRepository.findByLoginAndPwd(users.getLogin(), users.getPwd());
 
@@ -52,13 +50,12 @@ public class UserService {
                 .buildAndExpand(users1.getUser_id())
                 .toUri();
 
-        Link link = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(RvsController.class).getOneUserRvs(users1.getUser_id())).withRel("Liste des rendez-vous");
+        Link link = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(RvsController.class).getOneUserRvs(users1.getUser_id())).withRel("rvsList");
         users1.add(link);
 
         return ResponseEntity.ok(users1);
     }
 
-    @PutMapping(value = "/users/{user_id}")
     public ResponseEntity<Object> update(@PathVariable long user_id, @RequestBody Users users) {
 
         Users users1 = usersRepository.findById(user_id);
@@ -80,12 +77,10 @@ public class UserService {
         return ResponseEntity.ok(location);
     }
 
-    @GetMapping(value = "/users")
     public List<Users> getAll() {
         return usersRepository.findAll();
     }
 
-    @GetMapping(value = "/users/{user_id}")
     public ResponseEntity<Object> getOne(@PathVariable long user_id) {
         Users users = usersRepository.findById(user_id);
         if (users == null)
@@ -98,7 +93,7 @@ public class UserService {
                 .buildAndExpand(users.getUser_id())
                 .toUri();
 
-        Link link = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(RvsController.class).getOneUserRvs(user_id)).withRel("Liste des RVS");
+        Link link = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(RvsController.class).getOneUserRvs(user_id)).withRel("rvList");
         users.add(link);
 
         return ResponseEntity.created(location).body(users);

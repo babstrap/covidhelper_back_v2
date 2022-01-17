@@ -20,7 +20,6 @@ public class StructureService {
     @Autowired
     private StructuresRepository structuresRepository;
 
-    @PostMapping(value = "/structures")
     public ResponseEntity<Object> add(@RequestBody Structures structures) {
 
         Structures structures1 = structuresRepository.save(structures);
@@ -37,7 +36,6 @@ public class StructureService {
         return ResponseEntity.status(201).body("{'new_struct_link':"+location+"}");
     }
 
-    @PutMapping(value = "/structures/{struct_id}")
     public ResponseEntity<Object> update(@PathVariable long struct_id, @RequestBody Structures structures) {
 
         Structures structures1 = structuresRepository.findById(struct_id);
@@ -59,7 +57,6 @@ public class StructureService {
         return ResponseEntity.ok(location);
     }
 
-    @GetMapping(value = "/structures")
     public List<Structures> getAll() {
 
         List<Structures> structuresList = structuresRepository.findAll();
@@ -68,7 +65,6 @@ public class StructureService {
         return structuresList;
     }
 
-    @GetMapping(value = "/structures/{struct_id}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Object> getOne(@PathVariable long struct_id) {
         Structures structures = structuresRepository.findById(struct_id);
         if (structures == null)
